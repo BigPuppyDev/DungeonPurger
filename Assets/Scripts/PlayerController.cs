@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 nextRotation;
     public bool isMoving = false;
     public bool isAttacking = false;
+    private float turnAngle;
     private Rigidbody2D rigid;
     private Animator animatorController;
 
@@ -22,7 +23,8 @@ public class PlayerController : MonoBehaviour
     	
 	void Update ()
     {   
-        Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        Move();
+        Turn();
         Attack();
         UpdateAnimator();
 	}
@@ -45,21 +47,36 @@ public class PlayerController : MonoBehaviour
         animatorController.SetBool("IsAttacking", isAttacking);
     }
 
+    private void Move()
+    {
+        Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+    }
+
+    private void Turn()
+    {
+        //turnAngle = Mathf.Atan2(mouseOnScreen.y, mouseOnScreen.x) * Mathf.Rad2Deg;
+        //transform.rotation = Quaternion.AngleAxis(turnAngle, Vector3.forward);
+        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+
+        //Get the Screen position of the mouse
+        Vector2 mouseOnScreen = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+
+        //Get the angle between the points
+        float angle = AngleBetweenTwoPoints( mouseOnScreen, positionOnScreen);
+
+        //Ta Daaa
+        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
+    }
+
     private void Move(float directionX, float directionY)
     {
         nextPosition.Set(directionX, directionY);
-        nextRotation.Set(directionX, directionY, 0f);
         rigid.velocity = nextPosition * speed;
-        if (nextPosition != Vector2.zero)
-        {
-            float angle = Mathf.Atan2(nextPosition.y, nextPosition.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            isMoving = true;
-        }
-        else
-        {
-            isMoving = false;
-        }
-      //  transform.position = transform.position + speed * new Vector3(nextPosition.x, nextPosition.y, 0);
+        isMoving = rigid.velocity != Vector2.zero ? true : false;
+    }
+
+    private float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
+    {
+        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     }
 }
