@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigid;
     private Animator animatorController;
 
+    [SerializeField]
+    private WeaponsManager weaponsManager;
+
     private void Awake()
     {        
         nextPosition = Vector2.zero;
@@ -29,18 +32,28 @@ public class PlayerController : MonoBehaviour
     {   
         Move();
         Turn();
-        Attack();
+      //  Attack();
         UpdateAnimator();
 	}
 
+    private void FixedUpdate()
+    {
+        Attack();
+    }
+
     private void Attack()
     {
-        if (Input.GetKey(KeyCode.Mouse0) || Input.GetKeyUp(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.Mouse0))
+        if (!isAttacking)
         {
-            isAttacking = true;
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                weaponsManager.StartAttack();
+                isAttacking = true;
+            }
         }
         else
         {
+            weaponsManager.StopAttack();
             isAttacking = false;
         }
     }
