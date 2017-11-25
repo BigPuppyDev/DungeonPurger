@@ -6,13 +6,7 @@ public class CameraManager : MonoBehaviour
 {
     public Transform player;
     private Vector3 nextPosition;
-
-	void Start ()
-    {
-        
-	}
-	
-	
+    	
 	void Update ()
     {
         nextPosition = transform.position;

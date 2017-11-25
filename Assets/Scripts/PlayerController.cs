@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {    
     public bool isMoving = false;
     public bool isAttacking = false;
+    public bool isReloading = false;
     public float speed = 1f;
 
     private float turnAngle;
@@ -62,6 +63,7 @@ public class PlayerController : MonoBehaviour
     {
         animatorController.SetBool("IsMoving", isMoving);
         animatorController.SetBool("IsAttacking", isAttacking);
+        animatorController.SetBool("IsReloading", isReloading);
     }
 
     private void Move()

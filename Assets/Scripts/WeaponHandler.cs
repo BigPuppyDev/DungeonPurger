@@ -4,7 +4,66 @@ using UnityEngine;
 
 public abstract class WeaponHandler : MonoBehaviour
 {
-    public abstract void StartAttack();
-    public abstract void StopAttack();
-    public abstract bool IsAttacking();
+    [SerializeField]
+    protected float weaponDamage = 10f;
+
+    [SerializeField]
+    protected float attackSpeed = 1.5f;
+    protected float attackTime;
+    protected bool isAttacking = false;
+    protected BoxCollider2D weaponCollider;
+
+    void Awake()
+    {
+        attackTime = Time.time;
+        weaponCollider = GetComponent<BoxCollider2D>();
+    }
+
+    void FixedUpdate()
+    {
+        isAttacking = (isAttacking && attackTime <= Time.time) ? false : isAttacking;
+    }
+
+    protected void DamageTargets(Collider2D[] colliders)
+    {
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            DamageTarget(colliders[i]);
+        }
+    }
+
+    protected void DamageTarget(Collider2D collider)
+    {
+        if (collider == null || collider == weaponCollider)
+            return;
+
+        Debug.Log(collider.gameObject.name);
+        HealthHandler healthHandler = collider.GetComponent<HealthHandler>();
+        if (!healthHandler)
+            return;
+
+        healthHandler.TakeDamage(weaponDamage);
+    }
+
+    public void StartAttack()
+    {
+        if (!isAttacking)
+        {
+            isAttacking = true;
+            attackTime = Time.time + attackSpeed;
+            Attack();
+        }
+    }
+
+    public void StopAttack()
+    {
+
+    }
+
+    protected abstract void Attack();
+
+    public bool IsAttacking()
+    {
+        return isAttacking;
+    }
 }
