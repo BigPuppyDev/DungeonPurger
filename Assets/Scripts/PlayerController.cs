@@ -30,16 +30,24 @@ public class PlayerController : MonoBehaviour
     }
     	
 	void Update ()
-    {   
+    {
+        SwitchWeapons();
         Move();
         Turn();
-      //  Attack();
         UpdateAnimator();
 	}
-
+    
     private void FixedUpdate()
     {
         Attack();
+    }
+
+    private void SwitchWeapons()
+    {
+        if(Input.GetKeyUp(KeyCode.Q))
+        {
+            weaponsManager.SwitchWeapons(animatorController);
+        }        
     }
 
     private void Attack()

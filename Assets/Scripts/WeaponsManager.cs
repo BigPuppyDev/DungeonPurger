@@ -9,12 +9,29 @@ public class WeaponsManager : MonoBehaviour {
     [SerializeField]
     private List<WeaponHandler> weapons = new List<WeaponHandler>();
     private int index = 0;
+    private float switchTime = 0f;
+    [SerializeField]
+    private float switchCooldown = 0.1f;
 
-    public void SwitchWeapons()
+    private void Awake()
     {
-        index++;
-        index %= weapons.Count;
-        currentWeapon = weapons[index];
+        switchTime = Time.time;
+    }
+
+    public void SwitchWeapons(Animator animator)
+    {
+        if (Time.time >= switchTime + switchCooldown)
+        {
+            index++;
+            index %= weapons.Count;
+            currentWeapon.gameObject.SetActive(false);
+            currentWeapon = weapons[index];
+            currentWeapon.gameObject.SetActive(true);
+            switchTime = Time.time;
+            animator.runtimeAnimatorController = currentWeapon.GetAnimator();            
+            return;
+        }
+        return;
     }
 
     public void StartAttack()

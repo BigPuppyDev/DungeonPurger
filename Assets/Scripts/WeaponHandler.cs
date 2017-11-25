@@ -13,6 +13,9 @@ public abstract class WeaponHandler : MonoBehaviour
     protected bool isAttacking = false;
     protected BoxCollider2D weaponCollider;
 
+    [SerializeField]
+    private RuntimeAnimatorController weaponAnimator;
+
     void Awake()
     {
         attackTime = Time.time;
@@ -65,5 +68,10 @@ public abstract class WeaponHandler : MonoBehaviour
     public bool IsAttacking()
     {
         return isAttacking;
+    }
+
+    public RuntimeAnimatorController GetAnimator()
+    {
+        return weaponAnimator;
     }
 }
