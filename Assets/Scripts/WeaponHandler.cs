@@ -12,6 +12,7 @@ public abstract class WeaponHandler : MonoBehaviour
     protected float attackTime;
     protected bool isAttacking = false;
     protected BoxCollider2D weaponCollider;
+    private AudioSource audioSource;
 
     [SerializeField]
     private RuntimeAnimatorController weaponAnimator;
@@ -20,6 +21,7 @@ public abstract class WeaponHandler : MonoBehaviour
     {
         attackTime = Time.time;
         weaponCollider = GetComponent<BoxCollider2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void FixedUpdate()
@@ -27,7 +29,7 @@ public abstract class WeaponHandler : MonoBehaviour
         isAttacking = (isAttacking && attackTime <= Time.time) ? false : isAttacking;
     }
 
-    protected void DamageTargets(Collider2D[] colliders)
+    public void DamageTargets(Collider2D[] colliders)
     {
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -35,7 +37,7 @@ public abstract class WeaponHandler : MonoBehaviour
         }
     }
 
-    protected void DamageTarget(Collider2D collider)
+    public void DamageTarget(Collider2D collider)
     {
         if (collider == null || collider == weaponCollider)
             return;
@@ -54,6 +56,8 @@ public abstract class WeaponHandler : MonoBehaviour
         {
             isAttacking = true;
             attackTime = Time.time + attackSpeed;
+            if(audioSource != null) 
+                audioSource.Play();
             Attack();
         }
     }

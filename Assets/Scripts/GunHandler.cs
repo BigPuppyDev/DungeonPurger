@@ -7,7 +7,9 @@ public class GunHandler : WeaponHandler
     [SerializeField]
     GameObject bullet;
     [SerializeField]
-    private float bulletSpeed = 4f;    
+    private Sprite sprite;
+    [SerializeField]
+    private float bulletSpeed = 50f;
 
     override protected void Attack()
     {
@@ -16,10 +18,12 @@ public class GunHandler : WeaponHandler
 
     private void FireBullet()
     {
-        GameObject firedBullet = Instantiate(bullet, transform.position + transform.forward, transform.rotation);
-        Vector2 bulletVelocity = new Vector2(transform.right.x * bulletSpeed, transform.right.y * bulletSpeed);
-        Debug.Log("BULLET SPEED " + bulletVelocity);
-
-        firedBullet.GetComponent<Rigidbody2D>().velocity = bulletVelocity;
+        GameObject spawnedBullet = Instantiate(bullet, transform.position + transform.forward, transform.rotation);
+        spawnedBullet.GetComponent<Bullet>().Init(this);
     }
+
+    public float GetBulletSpeed()
+    {
+        return bulletSpeed;
+    }    
 }
