@@ -41,8 +41,7 @@ public abstract class WeaponHandler : MonoBehaviour
     {
         if (collider == null || collider == weaponCollider)
             return;
-
-        Debug.Log(collider.gameObject.name);
+        
         HealthHandler healthHandler = collider.GetComponent<HealthHandler>();
         if (!healthHandler)
             return;

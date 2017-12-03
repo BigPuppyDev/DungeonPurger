@@ -32,13 +32,25 @@ public class PlayerController : MonoBehaviour
 	void Update ()
     {
         SwitchWeapons();
-        Move();
+        
         Turn();
         UpdateAnimator();
+        
 	}
     
+    private void PushBack()
+    {
+        if(Input.GetKey(KeyCode.E))
+        {
+            Debug.Log("Pushing back");
+            rigid.AddForce(-20* transform.right, ForceMode2D.Impulse);
+        }
+    }
+
     private void FixedUpdate()
     {
+        Move();
+        PushBack();
         Attack();
     }
 
@@ -82,7 +94,7 @@ public class PlayerController : MonoBehaviour
     private void Move(float directionX, float directionY)
     {
         nextPosition.Set(directionX, directionY);
-        rigid.velocity = nextPosition * speed;
+        rigid.AddForce(speed * nextPosition);
         isMoving = rigid.velocity != Vector2.zero ? true : false;
     }
 
